@@ -1,7 +1,7 @@
 {
   "name": "horizon-timeseries-chart",
   "version": "0.1.0",
-  "description": "Sunburst interactive chart web component for visualizing hierarchical data",
+  "description": "A chart to represent time-series data using multiple vertically layered horizon area plots",
   "unpkg": "dist/horizon-timeseries-chart.min.js",
   "main": "dist/horizon-timeseries-chart.common.js",
   "module": "dist/horizon-timeseries-chart.module.js",
