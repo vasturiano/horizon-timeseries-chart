@@ -1,0 +1,56 @@
+{
+  "name": "horizon-timeseries-chart",
+  "version": "1.2.2",
+  "description": "Sunburst interactive chart web component for visualizing hierarchical data",
+  "unpkg": "dist/horizon-timeseries-chart.min.js",
+  "main": "dist/horizon-timeseries-chart.common.js",
+  "module": "dist/horizon-timeseries-chart.module.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasturiano/horizon-timeseries-chart.git"
+  },
+  "keywords": [
+    "d3",
+    "d3-module",
+    "horizon",
+    "timeseries",
+    "chart",
+    "svg"
+  ],
+  "author": {
+    "name": "Vasco Asturiano",
+    "url": "https://bl.ocks.org/vasturiano"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vasturiano/horizon-timeseries-chart/issues"
+  },
+  "homepage": "https://github.com/vasturiano/horizon-timeseries-chart",
+  "scripts": {
+    "build": "rm -rf dist && mkdir dist && rollup -c",
+    "watch": "rollup -c -w",
+    "minify": "uglifyjs dist/horizon-timeseries-chart.js -o dist/horizon-timeseries-chart.min.js -c -m --comments '/Version/'",
+    "build-module": "rollup -c rollup.config.module.js",
+    "prepublish": "npm run build && npm run minify && npm run build-module"
+  },
+  "dependencies": {
+    "accessor-fn": "^1.2.2",
+    "kapsule": "^1.9.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "postcss-nested": "^4.1.0",
+    "postcss-simple-vars": "^5.0.1",
+    "rollup": "^0.66.2",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.8",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-postcss": "^1.6.2",
+    "rollup-watch": "^4.3.1",
+    "uglify-js": "^3.4.9"
+  }
+}
