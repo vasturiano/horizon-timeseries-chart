@@ -1,0 +1,12 @@
+.horizonSeries {
+  position: relative;
+  border: 0 solid darkgray;
+}
+
+.horizonSeries .label {
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  font-family: sans-serif;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+}

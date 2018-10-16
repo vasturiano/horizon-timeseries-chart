@@ -1,1 +1,2 @@
-export default {};
+import './index.css';
+export { default } from './horizonChart';
