@@ -6,6 +6,7 @@ import d3Horizon from 'd3-horizon';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
 import indexBy from 'index-array-by';
+import memo from 'lodash.memoize';
 
 const AXIS_HEIGHT = 20;
 const MAX_FONT_SIZE = 13;
@@ -47,20 +48,17 @@ export default Kapsule({
   },
 
   update(state) {
-    const timeAccessor = accessorFn(state.ts);
     const valAccessor = accessorFn(state.val);
-    const seriesAccessor = accessorFn(state.series);
 
-    const data = state.data.map(d => ({
-      data: d,
-      ts: new Date(timeAccessor(d))
-    })); // decorate with derived ts
-    const times = data.map(d => d.ts);
+    // memoize to prevent calling timeAccessor multiple times
+    const tsMemo = memo(accessorFn(state.ts));
+
+    const times = state.data.map(tsMemo);
     state.timeScale
       .domain([Math.min(...times), Math.max(...times)])
       .range([0, state.width]);
 
-    const bySeries = indexBy(data, ({ data }) => seriesAccessor(data));
+    const bySeries = indexBy(state.data, state.series);
     const seriesData = Object.keys(bySeries)
       .sort(state.seriesComparator)
       .map(series => ({
@@ -113,8 +111,8 @@ export default Kapsule({
         .data(data)
         .bands(state.horizonBands)
         .mode(state.horizonMode)
-        .x(({ data }) => +data.ts)
-        .y(({ data }) => valAccessor(data))
+        .x(d => +tsMemo(d))
+        .y(valAccessor)
         .yExtent(state.yExtent)
         .xMin(+state.timeScale.domain()[0])
         .xMax(+state.timeScale.domain()[1])
