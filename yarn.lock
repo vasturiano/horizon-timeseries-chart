@@ -1190,10 +1190,10 @@ d3-format@1:
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.3.2.tgz#6a96b5e31bcb98122a30863f7d92365c00603562"
   integrity sha512-Z18Dprj96ExragQ0DeGi+SYPQ7pPfRMtUXtsg/ChVIKNBCzjO8XYJvRTC1usblx52lqge56V5ect+frYTQc8WQ==
 
-d3-horizon@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/d3-horizon/-/d3-horizon-1.6.2.tgz#120d57cd841989752564b9b6ca5a7302940a7c28"
-  integrity sha512-3z/WfgidFkVbtKw1/IjoFGougXhDAEsLQWT+khzATnR3oQpwoo8+a6ev0Xedingwzkv158nNWrc+UBx0T0a+aA==
+d3-horizon@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/d3-horizon/-/d3-horizon-1.6.5.tgz#0ad3135a1155359049c868bc806a1282cc4e46a4"
+  integrity sha512-FIuRBjJ5wVGXEZmN1sFs1GOyBvzUqIfmtKWZTl/hIyUaHtFw8wQ84s6rnj9flerRtioAOTpTSNfF0yn2+amzuQ==
   dependencies:
     accessor-fn "^1.2.2"
     d3-array "^2.0.1"
@@ -1240,7 +1240,7 @@ d3-shape@^1.2.2:
   dependencies:
     d3-path "1"
 
-d3-time-format@2:
+d3-time-format@2, d3-time-format@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-2.1.3.tgz#ae06f8e0126a9d60d6364eac5b1533ae1bac826b"
   integrity sha512-6k0a2rZryzGm5Ihx+aFMuO1GgelgIz+7HhB4PH4OEndD5q2zGn1mDfRdNrulspOfR6JXkb2sThhDK41CSK85QA==

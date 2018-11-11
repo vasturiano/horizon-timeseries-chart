@@ -2,6 +2,7 @@ import { select as d3Select } from 'd3-selection';
 import { transition as d3Transition } from 'd3-transition';
 import { axisBottom as d3AxisBottom } from 'd3-axis';
 import { scaleTime as d3ScaleTime } from 'd3-scale';
+import { timeFormat as d3TimeFormat } from 'd3-time-format';
 import d3Horizon from 'd3-horizon';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
@@ -11,6 +12,8 @@ import memo from 'lodash.memoize';
 const AXIS_HEIGHT = 20;
 const MAX_FONT_SIZE = 13;
 const MIN_SERIES_HEIGHT_WITH_BORDER = 20;
+
+const timeFormat = d3TimeFormat('%Y-%m-%d %-I:%M:%S %p');
 
 export default Kapsule({
   props: {
@@ -72,7 +75,7 @@ export default Kapsule({
 
     const tr = d3Transition().duration(state.duration);
 
-    const horizons = state.chartsEl.selectAll('.horizonSeries')
+    const horizons = state.chartsEl.selectAll('.horizon-series')
       .data(seriesData, d => d.series);
 
     horizons.exit()
@@ -85,7 +88,7 @@ export default Kapsule({
 
     const newHorizons = horizons.enter()
       .append('div')
-      .attr('class', 'horizonSeries');
+      .attr('class', 'horizon-series');
 
     newHorizons.append('div')
       .attr('class', 'chart')
@@ -119,6 +122,7 @@ export default Kapsule({
         .positiveColorRange(state.positiveColorRange)
         .negativeColorRange(state.negativeColorRange)
         .duration(state.duration)
+        .tooltipContent(({ x, y }) => `${timeFormat(x)}: ${y}`)
       );
 
     allHorizons.select('.label')
