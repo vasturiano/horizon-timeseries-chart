@@ -29,6 +29,7 @@ export default Kapsule({
     yExtent: {}, // undefined means it will be derived dynamically from the data
     positiveColorRange: { default: ['white', 'midnightblue'] },
     negativeColorRange: { default: ['white', 'crimson'] },
+    seriesLabelFormatter: { default: series => series },
     showRuler: {
       default: true,
       triggerUpdate: false,
@@ -144,7 +145,7 @@ export default Kapsule({
     allHorizons.select('.label')
       .transition(tr)
         .style('font-size', `${fontSize}px`)
-        .text(d => d.series);
+        .text(d => state.seriesLabelFormatter(d.series));
 
     state.axisEl
       .transition(tr)
