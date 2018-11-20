@@ -1,0 +1,73 @@
+<head>
+  <style>
+    body { margin: 0; }
+  </style>
+
+  <script src="//unpkg.com/horizon-timeseries-chart"></script>
+  <!--<script src="../../dist/horizon-timeseries-chart.js"></script>-->
+</head>
+<body>
+  <div id="horizon-chart"></div>
+
+  <script>
+    const N_POINTS = Math.round(window.innerWidth / 2);
+    const N_SERIES = 3;
+    const TIME_STEP = 1000;
+
+    const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
+      .series('series')
+      .ts('ts')
+      .val('val');
+
+    let { data, seriesLastPnt } = genZeroData(N_SERIES, N_POINTS);
+    (function onFrame() {
+      data = pushNewPoint(data, seriesLastPnt);
+      chart.data(data).yExtent(Math.max(...data.map(d => Math.abs(d.val))));
+
+      requestAnimationFrame(onFrame);
+    })(); // IFFE
+
+    //
+
+    function genZeroData(nSeries = 10, nPoints = 100, timeStep = TIME_STEP, endTime = new Date()) {
+      const startTime = +endTime - nPoints * timeStep;
+      const seriesPnt = {};
+      [...new Array(nSeries)].forEach((_, i) => seriesPnt[`series${i}`] = {
+        ts: startTime,
+        val: 0
+      });
+
+      let data = [];
+      [...new Array(nPoints)].forEach(() =>
+        Object.keys(seriesPnt).forEach(series => {
+          seriesPnt[series].ts += TIME_STEP;
+          data.push({ series, ...seriesPnt[series] })
+        })
+      );
+
+      return { data, seriesLastPnt: seriesPnt };
+    }
+
+    function pushNewPoint(data, seriesLastPnt, timeStep) {
+      const numSeries = Object.keys(seriesLastPnt).length;
+      data = data.slice(numSeries) // remove oldest point
+        .concat(Object.entries(genNewSeriesTimePoint(seriesLastPnt, timeStep))
+          .map(([series, d]) => ({ series, ...d })));
+
+      return data;
+
+      function genNewSeriesTimePoint(prevSeriesVals, timeStep = TIME_STEP) {
+        Object.keys(prevSeriesVals).forEach(series => prevSeriesVals[series] = genTimePoint(prevSeriesVals[series], timeStep));
+
+        return prevSeriesVals;
+
+        function genTimePoint({ ts: prevTs, val: prevVal }, timeStep) {
+          return {
+            ts: prevTs + timeStep,
+            val: prevVal += (Math.random() - 0.5)
+          }
+        }
+      }
+    }
+  </script>
+</body>
