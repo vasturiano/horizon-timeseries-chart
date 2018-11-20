@@ -27,6 +27,7 @@ export default Kapsule({
     horizonBands: { default: 4 },
     horizonMode: { default: 'offset' }, // or mirror
     yExtent: {}, // undefined means it will be derived dynamically from the data
+    yScaleExp: { default: 1 },
     positiveColorRange: { default: ['white', 'midnightblue'] },
     negativeColorRange: { default: ['white', 'crimson'] },
     seriesLabelFormatter: { default: series => series },
@@ -65,6 +66,7 @@ export default Kapsule({
 
   update(state) {
     const valAccessor = accessorFn(state.val);
+    const yScaleExpAccessor = accessorFn(state.yScaleExp);
 
     // memoize to prevent calling timeAccessor multiple times
     const tsMemo = memo(accessorFn(state.ts));
@@ -130,6 +132,7 @@ export default Kapsule({
         .x(tsMemo)
         .y(valAccessor)
         .yExtent(state.yExtent)
+        .yScaleExp(yScaleExpAccessor(series))
         .xMin(state.timeScale.domain()[0])
         .xMax(state.timeScale.domain()[1])
         .positiveColorRange(state.positiveColorRange)

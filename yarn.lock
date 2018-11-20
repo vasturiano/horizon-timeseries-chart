@@ -1190,10 +1190,10 @@ d3-format@1:
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.3.2.tgz#6a96b5e31bcb98122a30863f7d92365c00603562"
   integrity sha512-Z18Dprj96ExragQ0DeGi+SYPQ7pPfRMtUXtsg/ChVIKNBCzjO8XYJvRTC1usblx52lqge56V5ect+frYTQc8WQ==
 
-d3-horizon@^1.6.6:
-  version "1.6.6"
-  resolved "https://registry.yarnpkg.com/d3-horizon/-/d3-horizon-1.6.6.tgz#a680a8935b89bfa52e9d5bbf8e3f1349cd06cdbf"
-  integrity sha512-kbFxRrTLqjQ5PIncqceAapfS6nHQyehEJyTa8UgcRuFGZtxz0uSVOSXrYvE/joYwzLw+IVMtrFUXjxHgQNoyNg==
+d3-horizon@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/d3-horizon/-/d3-horizon-1.7.0.tgz#508432e8c30f02fbfed662d1f22dc0863a9daf5a"
+  integrity sha512-3vds6H3ffxXMxk96yQjM9TPC+l5ZeQoAX7FkkTPpcT4ZX2wOsyqHxk6VbQT9DKMmptQ3IVTvH3l3buw3lMYWyw==
   dependencies:
     accessor-fn "^1.2.2"
     d3-array "^2.0.1"
