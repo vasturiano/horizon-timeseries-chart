@@ -29,7 +29,14 @@ export default Kapsule({
     yExtent: {}, // undefined means it will be derived dynamically from the data
     positiveColorRange: { default: ['white', 'midnightblue'] },
     negativeColorRange: { default: ['white', 'crimson'] },
-    duration: { default: 250 }
+    showRuler: {
+      default: true,
+      triggerUpdate: false,
+      onChange: (show, state) => state.ruler && state.ruler.style('visibility', show ? 'visible' : 'hidden')
+    },
+    showTooltip: { default: true },
+    tooltipContent: { default: ({ series, ts, val }) => `<b>${series}</b><br>${timeFormat(ts)}: <b>${val}</b>` },
+    transitionDuration: { default: 250 }
   },
 
   stateInit() {
@@ -44,7 +51,12 @@ export default Kapsule({
     const d3El = d3Select(isD3Selection ? el.node() : el);
     d3El.html(null); // wipe DOM
 
-    state.chartsEl = d3El.append('div');
+    state.chartsEl = d3El.append('div')
+      .style('position', 'relative');
+
+    state.ruler = state.chartsEl.append('div')
+      .attr('class', 'horizon-ruler');
+
     state.axisEl = d3El.append('svg')
       .attr('height', AXIS_HEIGHT)
       .style('display', 'block');
@@ -73,7 +85,7 @@ export default Kapsule({
     const fontSize = Math.min(MAX_FONT_SIZE, Math.round(seriesHeight * 0.9));
     const borderWidth = seriesHeight >= MIN_SERIES_HEIGHT_WITH_BORDER ? 1 : 0;
 
-    const tr = d3Transition().duration(state.duration);
+    const tr = d3Transition().duration(state.transitionDuration);
 
     const horizons = state.chartsEl.selectAll('.horizon-series')
       .data(seriesData, d => d.series);
@@ -121,8 +133,12 @@ export default Kapsule({
         .xMax(state.timeScale.domain()[1])
         .positiveColorRange(state.positiveColorRange)
         .negativeColorRange(state.negativeColorRange)
-        .duration(state.duration)
-        .tooltipContent(({ x, y }) => `${timeFormat(x)}: ${y}`)
+        .duration(state.transitionDuration)
+        .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest })))
+        .onHover(d => {
+          d && state.ruler.style('left', `${state.timeScale(d.x)}px`);
+          state.ruler.style('opacity', d ? 0.2 : 0);
+        })
       );
 
     allHorizons.select('.label')

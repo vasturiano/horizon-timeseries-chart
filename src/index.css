@@ -15,3 +15,15 @@
 .horizon-series .chart .horizon-tooltip {
   z-index: 1000;
 }
+
+.horizon-ruler {
+  position: absolute;
+  background: black;
+  opacity: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  pointer-events: none;
+  transition: opacity 0.5s;
+  z-index: 100;
+}
