@@ -1,5 +1,6 @@
-import { select as d3Select } from 'd3-selection';
+import { select as d3Select, event as d3Event } from 'd3-selection';
 import { transition as d3Transition } from 'd3-transition';
+import { zoom as d3Zoom, zoomTransform as d3ZoomTransform } from 'd3-zoom';
 import { axisBottom as d3AxisBottom } from 'd3-axis';
 import { scaleTime as d3ScaleTime } from 'd3-scale';
 import { timeFormat as d3TimeFormat } from 'd3-time-format';
@@ -12,6 +13,7 @@ import memo from 'lodash.memoize';
 const AXIS_HEIGHT = 20;
 const MAX_FONT_SIZE = 13;
 const MIN_SERIES_HEIGHT_WITH_BORDER = 20;
+const MAX_ZOOM_SCALE = 5000;
 
 const timeFormat = d3TimeFormat('%Y-%m-%d %-I:%M:%S %p');
 
@@ -36,6 +38,7 @@ export default Kapsule({
       triggerUpdate: false,
       onChange: (show, state) => state.ruler && state.ruler.style('visibility', show ? 'visible' : 'hidden')
     },
+    enableZoom: { default: false },
     showTooltip: { default: true },
     tooltipContent: { default: ({ series, ts, val }) => `<b>${series}</b><br>${timeFormat(ts)}: <b>${val}</b>` },
     transitionDuration: { default: 250 }
@@ -44,7 +47,8 @@ export default Kapsule({
   stateInit() {
     return {
       timeScale: d3ScaleTime(),
-      horizonLayouts: {} // per series
+      horizonLayouts: {}, // per series
+      zoomedInteraction: false
     }
   },
 
@@ -62,6 +66,18 @@ export default Kapsule({
     state.axisEl = d3El.append('svg')
       .attr('height', AXIS_HEIGHT)
       .style('display', 'block');
+
+    // Bind zoom
+    state.chartsEl.call(state.zoom = d3Zoom());
+    state.zoom.__baseElem = state.chartsEl; // Attach controlling elem for easy access
+    state.zoom
+      .scaleExtent([1, MAX_ZOOM_SCALE])
+      .on('zoom', () => {
+        if (state.enableZoom) {
+          state.zoomedInteraction = true;
+          state._rerender();
+        }
+      });
   },
 
   update(state) {
@@ -76,6 +92,16 @@ export default Kapsule({
       .domain([Math.min(...times), Math.max(...times)])
       .range([0, state.width]);
 
+    if (state.enableZoom) {
+      state.zoom.translateExtent([[0, 0], [state.width, 0]]);
+
+      // apply zoom
+      const zoomTransform = d3ZoomTransform(state.zoom.__baseElem.node());
+      const zoomedTimeLength = (state.timeScale.domain()[1] - state.timeScale.domain()[0]) / zoomTransform.k;
+      const zoomedStartTime = state.timeScale.invert(-zoomTransform.x / zoomTransform.k);
+      state.timeScale.domain([zoomedStartTime, new Date(+zoomedStartTime + zoomedTimeLength)]);
+    }
+
     const bySeries = indexBy(state.data, state.series);
     const seriesData = Object.keys(bySeries)
       .sort(state.seriesComparator)
@@ -88,7 +114,7 @@ export default Kapsule({
     const fontSize = Math.min(MAX_FONT_SIZE, Math.round(seriesHeight * 0.9));
     const borderWidth = seriesHeight >= MIN_SERIES_HEIGHT_WITH_BORDER ? 1 : 0;
 
-    const tr = d3Transition().duration(state.transitionDuration);
+    const tr = d3Transition().duration(state.zoomedInteraction ? 0 :state.transitionDuration);
 
     const horizons = state.chartsEl.selectAll('.horizon-series')
       .data(seriesData, d => d.series);
@@ -154,5 +180,7 @@ export default Kapsule({
       .transition(tr)
         .attr('width', state.width)
         .call(d3AxisBottom(state.timeScale));
+
+    state.zoomedInteraction = false;
   }
 });

@@ -1,0 +1,35 @@
+<head>
+  <style>
+    body { margin: 0; }
+  </style>
+
+  <script src="//unpkg.com/horizon-timeseries-chart"></script>
+  <!--<script src="../../dist/horizon-timeseries-chart.js"></script>-->
+</head>
+<body>
+  <div id="horizon-chart"></div>
+
+  <script>
+
+    function genRandomTSData(nPoints = 100, startTime = new Date(), timeBin = 24 * 60 * 60 * 1000) {
+      let prevTime = +startTime - nPoints * timeBin;
+      let prevVal = 0;
+      return [...new Array(nPoints)].map(() => ({
+        ts: new Date(prevTime += timeBin),
+        val: prevVal += (Math.random() * 10 - 5)
+      }));
+    }
+
+    const data = genRandomTSData(365 * 25); // 25y in days
+    const yMax = Math.max(...data.map(d => Math.abs(d.val)));
+
+    const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
+      .data(data)
+      .seriesLabelFormatter(() => '')
+      .ts('ts')
+      .val('val')
+      .yExtent(yMax)
+      .enableZoom(true)
+      .tooltipContent(({ ts, val }) => `<b>${new Date(ts).toLocaleDateString()}</b>: ${Math.round(val)}`);
+  </script>
+</body>
