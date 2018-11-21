@@ -39,7 +39,6 @@ export default Kapsule({
       onChange: (show, state) => state.ruler && state.ruler.style('visibility', show ? 'visible' : 'hidden')
     },
     enableZoom: { default: false },
-    showTooltip: { default: true },
     tooltipContent: { default: ({ series, ts, val }) => `<b>${series}</b><br>${timeFormat(ts)}: <b>${val}</b>` },
     transitionDuration: { default: 250 }
   },
@@ -82,6 +81,7 @@ export default Kapsule({
 
   update(state) {
     const valAccessor = accessorFn(state.val);
+    const yExtentAccessor = accessorFn(state.yExtent);
     const yScaleExpAccessor = accessorFn(state.yScaleExp);
 
     // memoize to prevent calling timeAccessor multiple times
@@ -157,7 +157,7 @@ export default Kapsule({
         .mode(state.horizonMode)
         .x(tsMemo)
         .y(valAccessor)
-        .yExtent(state.yExtent)
+        .yExtent(yExtentAccessor(series))
         .yScaleExp(yScaleExpAccessor(series))
         .xMin(state.timeScale.domain()[0])
         .xMax(state.timeScale.domain()[1])
