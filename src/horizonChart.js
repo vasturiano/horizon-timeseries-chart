@@ -4,6 +4,7 @@ import { zoom as d3Zoom, zoomTransform as d3ZoomTransform } from 'd3-zoom';
 import { axisBottom as d3AxisBottom } from 'd3-axis';
 import { scaleTime as d3ScaleTime } from 'd3-scale';
 import { timeFormat as d3TimeFormat } from 'd3-time-format';
+import { curveBasis as d3CurveBasis } from 'd3-shape';
 import { extent as d3Extent } from 'd3-array';
 import d3Horizon from 'd3-horizon';
 import Kapsule from 'kapsule';
@@ -33,6 +34,7 @@ export default Kapsule({
     yScaleExp: { default: 1 },
     positiveColorRange: { default: ['white', 'midnightblue'] },
     negativeColorRange: { default: ['white', 'crimson'] },
+    interpolationCurve: { default: d3CurveBasis },
     seriesLabelFormatter: { default: series => series },
     showRuler: {
       default: true,
@@ -164,6 +166,7 @@ export default Kapsule({
         .xMax(state.timeScale.domain()[1])
         .positiveColorRange(state.positiveColorRange)
         .negativeColorRange(state.negativeColorRange)
+        .interpolationCurve(state.interpolationCurve)
         .duration(state.transitionDuration)
         .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest })))
         .onHover(d => {

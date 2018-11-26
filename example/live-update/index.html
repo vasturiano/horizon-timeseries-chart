@@ -17,7 +17,8 @@
     const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
       .series('series')
       .ts('ts')
-      .val('val');
+      .val('val')
+      .interpolationCurve(false);
 
     let { data, seriesLastPnt } = genZeroData(N_SERIES, N_POINTS);
     (function onFrame() {

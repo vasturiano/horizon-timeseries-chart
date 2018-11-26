@@ -29,6 +29,7 @@
       .ts('ts')
       .val('val')
       .yExtent(yMax)
+      .interpolationCurve(false)
       .enableZoom(true)
       .tooltipContent(({ ts, val }) => `<b>${new Date(ts).toLocaleDateString()}</b>: ${Math.round(val)}`);
   </script>
