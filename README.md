@@ -14,6 +14,7 @@ Check out the examples:
 * [Basic multi-series with random generated data](https://vasturiano.github.io/horizon-timeseries-chart/example/basic/) ([source](https://github.com/vasturiano/horizon-timeseries-chart/blob/master/example/basic/index.html))
 * [Zoom interaction on large data set](https://vasturiano.github.io/horizon-timeseries-chart/example/large-zoom/) ([source](https://github.com/vasturiano/horizon-timeseries-chart/blob/master/example/large-zoom/index.html))
 * [Live-updating data insertion](https://vasturiano.github.io/horizon-timeseries-chart/example/live-update/) ([source](https://github.com/vasturiano/horizon-timeseries-chart/blob/master/example/live-update/index.html))
+* [Currency heatmap](https://vasturiano.github.io/horizon-timeseries-chart/example/currency-heatmap/) ([source](https://github.com/vasturiano/horizon-timeseries-chart/blob/master/example/currency-heatmap/index.html))
 
 ## Quick start
 

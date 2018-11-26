@@ -1,0 +1,86 @@
+<head>
+  <style>
+    body { margin: 0; }
+  </style>
+
+  <script src="//unpkg.com/d3-dsv"></script>
+  <script src="//unpkg.com/horizon-timeseries-chart"></script>
+  <!--<script src="../../dist/horizon-timeseries-chart.js"></script>-->
+</head>
+<body>
+  <div id="horizon-chart"></div>
+
+  <script>
+    // data sourced from https://www.bis.org/statistics/xrusd.htm
+    fetch('./bis-dollar-currencies-daily.csv')
+      .then(r => r.text())
+      .then(d3.csvParse)
+      .then(data => {
+        const chartData = [];
+
+        // Sample dates
+        const SAMPLE_DAYS = 7;
+        const MIN_DATE = new Date('1970-01');
+        const dateCols = data.columns
+          .filter(col => /^\d/.test(col))
+          .filter((col, i) => i%SAMPLE_DAYS === 0)
+          .map(col => ([col, new Date(col)]))
+          .filter(([, date]) => !isNaN(date) && date > MIN_DATE);
+
+        const revCols = data.columns.reverse();
+        data.forEach(d => {
+          const meta = {
+            currency: d.CURRENCY,
+            currencyName: d.Currency,
+            cc: d.REF_AREA,
+            ccName: d['Reference area'],
+            currencyId: `${d.CURRENCY} (${d.REF_AREA})`,
+            latestVal: +d[revCols.find(col => d[col] && !isNaN(d[col]))]
+          };
+
+          meta.latestPrice = 1 / meta.latestVal;
+
+          dateCols
+            .map(([col, date]) => ({ date, val: +d[col] }))
+            .filter(({ val }) => val)
+            .forEach(({ date, val }) => chartData.push({
+              date,
+              val,
+              usdPrice: 1 / val,
+              relPrice: (1 / val / meta.latestPrice) - 1,
+              ...meta
+            }));
+        });
+
+        console.log(chartData);
+
+        const formatPrice = val => `<i>$${Math.round(val * 1e4) / 1e4}</i>`;
+
+        HorizonTSChart()(document.getElementById('horizon-chart'))
+          .data(chartData)
+          .series('currencyId')
+          .ts('date')
+          .val('relPrice')
+          .yExtent(1)
+          .horizonBands(12)
+          .horizonMode('mirror')
+          .interpolationCurve(false)
+          .tooltipContent(({ ts, points: [{
+            currency,
+            currencyName,
+            cc,
+            ccName,
+            date,
+            usdPrice,
+            relPrice,
+            latestPrice
+          }] }) => `
+            <b>${currencyName} [${currency}] (${ccName})</b>
+            <br><br>
+            ${date.toLocaleDateString()}: ${formatPrice(usdPrice)}
+            <br>
+            (${relPrice >= 0 ? '+' : ''}${Math.round(relPrice * 100)}% of current ${formatPrice(latestPrice)})
+          `);
+      });
+  </script>
+</body>
