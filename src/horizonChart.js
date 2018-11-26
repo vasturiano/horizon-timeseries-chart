@@ -4,6 +4,7 @@ import { zoom as d3Zoom, zoomTransform as d3ZoomTransform } from 'd3-zoom';
 import { axisBottom as d3AxisBottom } from 'd3-axis';
 import { scaleTime as d3ScaleTime } from 'd3-scale';
 import { timeFormat as d3TimeFormat } from 'd3-time-format';
+import { extent as d3Extent } from 'd3-array';
 import d3Horizon from 'd3-horizon';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
@@ -89,7 +90,7 @@ export default Kapsule({
 
     const times = state.data.map(tsMemo);
     state.timeScale
-      .domain([Math.min(...times), Math.max(...times)])
+      .domain(d3Extent(times))
       .range([0, state.width]);
 
     if (state.enableZoom) {
