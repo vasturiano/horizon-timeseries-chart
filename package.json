@@ -31,7 +31,7 @@
     "watch": "rollup -c -w",
     "minify": "uglifyjs dist/horizon-timeseries-chart.js -o dist/horizon-timeseries-chart.min.js -c -m --comments '/Version/'",
     "build-module": "rollup -c rollup.config.module.js",
-    "prepublishOnly": "npm run build && npm run minify && npm run build-module"
+    "prepare": "npm run build && npm run minify && npm run build-module"
   },
   "dependencies": {
     "accessor-fn": "^1.2.2",
@@ -40,6 +40,7 @@
     "d3-horizon": "^1.8.2",
     "d3-scale": "^2.1.2",
     "d3-selection": "^1.3.2",
+    "d3-shape": "^1.2.2",
     "d3-time-format": "^2.1.3",
     "d3-transition": "^1.1.3",
     "d3-zoom": "^1.7.3",
