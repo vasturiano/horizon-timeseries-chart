@@ -1,6 +1,6 @@
 {
   "name": "horizon-timeseries-chart",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A chart to represent time-series data using multiple vertically layered horizon area plots",
   "unpkg": "dist/horizon-timeseries-chart.min.js",
   "main": "dist/horizon-timeseries-chart.common.js",
