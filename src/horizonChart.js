@@ -32,6 +32,7 @@ export default Kapsule({
     horizonMode: { default: 'offset' }, // or mirror
     yExtent: {}, // undefined means it will be derived dynamically from the data
     yScaleExp: { default: 1 },
+    yAggregation: { default: vals => vals.reduce((agg, val) => agg + val) }, // sum reduce
     positiveColorRange: { default: ['white', 'midnightblue'] },
     negativeColorRange: { default: ['white', 'crimson'] },
     interpolationCurve: { default: d3CurveBasis },
@@ -86,6 +87,8 @@ export default Kapsule({
     const valAccessor = accessorFn(state.val);
     const yExtentAccessor = accessorFn(state.yExtent);
     const yScaleExpAccessor = accessorFn(state.yScaleExp);
+    const positiveColorRangeAccessor = accessorFn(state.positiveColorRange);
+    const negativeColorRangeAccessor = accessorFn(state.negativeColorRange);
 
     // memoize to prevent calling timeAccessor multiple times
     const tsMemo = memo(accessorFn(state.ts));
@@ -162,10 +165,11 @@ export default Kapsule({
         .y(valAccessor)
         .yExtent(yExtentAccessor(series))
         .yScaleExp(yScaleExpAccessor(series))
+        .yAggregation(state.yAggregation)
         .xMin(state.timeScale.domain()[0])
         .xMax(state.timeScale.domain()[1])
-        .positiveColorRange(state.positiveColorRange)
-        .negativeColorRange(state.negativeColorRange)
+        .positiveColorRange(positiveColorRangeAccessor(series))
+        .negativeColorRange(negativeColorRangeAccessor(series))
         .interpolationCurve(state.interpolationCurve)
         .duration(state.transitionDuration)
         .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest })))
