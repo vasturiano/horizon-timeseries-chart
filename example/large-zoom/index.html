@@ -26,8 +26,6 @@
     const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
       .data(data)
       .seriesLabelFormatter(() => '')
-      .ts('ts')
-      .val('val')
       .yExtent(yMax)
       .interpolationCurve(false)
       .enableZoom(true)
