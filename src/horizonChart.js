@@ -33,8 +33,10 @@ export default Kapsule({
     yExtent: {}, // undefined means it will be derived dynamically from the data
     yScaleExp: { default: 1 },
     yAggregation: { default: vals => vals.reduce((agg, val) => agg + val) }, // sum reduce
-    positiveColorRange: { default: ['white', 'midnightblue'] },
-    negativeColorRange: { default: ['white', 'crimson'] },
+    positiveColors: { default: ['white', 'midnightblue'] },
+    negativeColors: { default: ['white', 'crimson'] },
+    positiveColorStops: {},
+    negativeColorStops: {},
     interpolationCurve: { default: d3CurveBasis },
     seriesLabelFormatter: { default: series => series },
     showRuler: {
@@ -44,7 +46,9 @@ export default Kapsule({
     },
     enableZoom: { default: false },
     tooltipContent: { default: ({ series, ts, val }) => `<b>${series}</b><br>${timeFormat(ts)}: <b>${val}</b>` },
-    transitionDuration: { default: 250 }
+    transitionDuration: { default: 250 },
+    onHover: { triggerUpdate: false },
+    onClick: {}
   },
 
   stateInit() {
@@ -87,8 +91,10 @@ export default Kapsule({
     const valAccessor = accessorFn(state.val);
     const yExtentAccessor = accessorFn(state.yExtent);
     const yScaleExpAccessor = accessorFn(state.yScaleExp);
-    const positiveColorRangeAccessor = accessorFn(state.positiveColorRange);
-    const negativeColorRangeAccessor = accessorFn(state.negativeColorRange);
+    const positiveColorsAccessor = accessorFn(state.positiveColors);
+    const negativeColorsAccessor = accessorFn(state.negativeColors);
+    const positiveColorStopsAccessor = accessorFn(state.positiveColorStops);
+    const negativeColorStopsAccessor = accessorFn(state.negativeColorStops);
 
     // memoize to prevent calling timeAccessor multiple times
     const tsMemo = memo(accessorFn(state.ts));
@@ -168,15 +174,20 @@ export default Kapsule({
         .yAggregation(state.yAggregation)
         .xMin(state.timeScale.domain()[0])
         .xMax(state.timeScale.domain()[1])
-        .positiveColorRange(positiveColorRangeAccessor(series))
-        .negativeColorRange(negativeColorRangeAccessor(series))
+        .positiveColors(positiveColorsAccessor(series))
+        .negativeColors(negativeColorsAccessor(series))
+        .positiveColorStops(positiveColorStopsAccessor(series))
+        .negativeColorStops(negativeColorStopsAccessor(series))
         .interpolationCurve(state.interpolationCurve)
         .duration(state.transitionDuration)
         .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest })))
         .onHover(d => {
           d && state.ruler.style('left', `${state.timeScale(d.x)}px`);
           state.ruler.style('opacity', d ? 0.2 : 0);
+
+          d && state.onHover && state.onHover({ series, ts: d.x, val: d.y, points: d.points });
         })
+        .onClick(state.onClick ? d => d && state.onClick({ series, ts: d.x, val: d.y, points: d.points }) : undefined)
       );
 
     allHorizons.select('.label')
