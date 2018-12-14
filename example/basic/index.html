@@ -10,12 +10,20 @@
   <div id="horizon-chart"></div>
 
   <script>
-    const genTSData = (nSeries = 10) => {
+
+    HorizonTSChart()(document.getElementById('horizon-chart'))
+      .data(genTSData(10))
+      .series('series')
+      .yNormalize(true);
+
+    //
+
+    function genTSData(nSeries = 10) {
       let data = [];
 
       const startTime = new Date();
       [...new Array(nSeries)].forEach((_, i) => {
-        data = [...data, ...genRandomTSData(100, startTime).map(d => Object.assign({ series: `series${i}`}, d))];
+        data = data.concat(...genRandomTSData(100, startTime).map(d => Object.assign({ series: `series${i}`}, d)));
       });
 
       return data;
@@ -31,13 +39,5 @@
         }));
       };
     };
-
-    const data = genTSData(10);
-    const yMax = Math.max(...data.map(d => Math.abs(d.val)));
-
-    const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
-      .data(data)
-      .series('series')
-      .yExtent(yMax);
   </script>
 </body>

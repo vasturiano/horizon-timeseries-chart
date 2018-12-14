@@ -31,6 +31,7 @@ export default Kapsule({
     horizonBands: { default: 4 },
     horizonMode: { default: 'offset' }, // or mirror
     yExtent: {}, // undefined means it will be derived dynamically from the data
+    yNormalize: { default: false },
     yScaleExp: { default: 1 },
     yAggregation: { default: vals => vals.reduce((agg, val) => agg + val) }, // sum reduce
     positiveColors: { default: ['white', 'midnightblue'] },
@@ -122,6 +123,17 @@ export default Kapsule({
         data: bySeries[series]
       }));
 
+    // Calculate global Y max if yNormalize is on
+    const normalizedYMax = !state.yNormalize ? null : Math.max(
+      ...seriesData
+        .map(({ data }) => Math.max(
+          ...Object.values(indexBy(data, tsMemo))
+            .map(points => state.yAggregation(points.map(valAccessor)))
+            .map(Math.abs) // absolute max vals
+        )
+      )
+    );
+
     const seriesHeight = (state.height - AXIS_HEIGHT) / seriesData.length;
     const fontSize = Math.min(MAX_FONT_SIZE, Math.round(seriesHeight * 0.9));
     const borderWidth = seriesHeight >= MIN_SERIES_HEIGHT_WITH_BORDER ? 1 : 0;
@@ -169,7 +181,7 @@ export default Kapsule({
         .mode(state.horizonMode)
         .x(tsMemo)
         .y(valAccessor)
-        .yExtent(yExtentAccessor(series))
+        .yExtent(yExtentAccessor(series) || normalizedYMax || null) // Use normalizedYMax (if calculated) if yExtent is not explicitly set
         .yScaleExp(yScaleExpAccessor(series))
         .yAggregation(state.yAggregation)
         .xMin(state.timeScale.domain()[0])

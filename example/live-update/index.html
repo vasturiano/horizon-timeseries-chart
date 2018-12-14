@@ -16,12 +16,13 @@
 
     const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
       .series('series')
+      .yNormalize(true)
       .interpolationCurve(false);
 
     let { data, seriesLastPnt } = genZeroData(N_SERIES, N_POINTS);
     (function onFrame() {
       data = pushNewPoint(data, seriesLastPnt);
-      chart.data(data).yExtent(Math.max(...data.map(d => Math.abs(d.val))));
+      chart.data(data);
 
       requestAnimationFrame(onFrame);
     })(); // IFFE
