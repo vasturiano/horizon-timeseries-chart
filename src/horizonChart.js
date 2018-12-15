@@ -125,13 +125,13 @@ export default Kapsule({
 
     // Calculate global Y max if yNormalize is on
     const normalizedYMax = !state.yNormalize ? null : Math.max(
-      ...seriesData
-        .map(({ data }) => Math.max(
-          ...Object.values(indexBy(data, tsMemo))
-            .map(points => state.yAggregation(points.map(valAccessor)))
-            .map(Math.abs) // absolute max vals
-        )
+      ...indexBy(
+        state.data,
+        [state.series, d => +tsMemo(d)],
+        points => state.yAggregation(points.map(valAccessor)),
+        true
       )
+      .map(d => d.vals)
     );
 
     const seriesHeight = (state.height - AXIS_HEIGHT) / seriesData.length;
