@@ -132,6 +132,7 @@ export default Kapsule({
         true
       )
       .map(d => d.vals)
+      .map(Math.abs) // get max absolute val
     );
 
     const seriesHeight = (state.height - AXIS_HEIGHT) / seriesData.length;
