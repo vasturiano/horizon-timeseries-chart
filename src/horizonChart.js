@@ -160,7 +160,10 @@ export default Kapsule({
       .attr('class', 'chart')
       .each(function({ series }) {
         // instantiate d3-horizon for each new series
-        state.horizonLayouts[series] = d3Horizon()(this);
+        state.horizonLayouts[series] = d3Horizon()
+          .width(state.width)
+          .height(seriesHeight - borderWidth)
+          (this);
       });
     newHorizons.append('span')
       .attr('class', 'label')
