@@ -2,8 +2,8 @@ import { select as d3Select, event as d3Event } from 'd3-selection';
 import { transition as d3Transition } from 'd3-transition';
 import { zoom as d3Zoom, zoomTransform as d3ZoomTransform } from 'd3-zoom';
 import { axisBottom as d3AxisBottom } from 'd3-axis';
-import { scaleTime as d3ScaleTime } from 'd3-scale';
-import { timeFormat as d3TimeFormat } from 'd3-time-format';
+import { scaleTime as d3ScaleTime, scaleUtc as d3ScaleUtc } from 'd3-scale';
+import { timeFormat as d3TimeFormat, utcFormat as d3UtcFormat } from 'd3-time-format';
 import { curveBasis as d3CurveBasis } from 'd3-shape';
 import { extent as d3Extent } from 'd3-array';
 import d3Horizon from 'd3-horizon';
@@ -17,7 +17,7 @@ const MAX_FONT_SIZE = 13;
 const MIN_SERIES_HEIGHT_WITH_BORDER = 20;
 const MAX_ZOOM_SCALE = 5000;
 
-const timeFormat = d3TimeFormat('%Y-%m-%d %-I:%M:%S %p');
+const timeFormat = '%Y-%m-%d %-I:%M:%S %p'; // d3-time-format syntax
 
 export default Kapsule({
   props: {
@@ -30,6 +30,7 @@ export default Kapsule({
     seriesComparator: { default: (a, b) => a.localeCompare(b) },
     horizonBands: { default: 4 },
     horizonMode: { default: 'offset' }, // or mirror
+    useUtc: { default: false }, // local timezone vs utc
     yExtent: {}, // undefined means it will be derived dynamically from the data
     yNormalize: { default: false },
     yScaleExp: { default: 1 },
@@ -46,7 +47,7 @@ export default Kapsule({
       onChange: (show, state) => state.ruler && state.ruler.style('visibility', show ? 'visible' : 'hidden')
     },
     enableZoom: { default: false },
-    tooltipContent: { default: ({ series, ts, val }) => `<b>${series}</b><br>${timeFormat(ts)}: <b>${val}</b>` },
+    tooltipContent: { default: ({ series, ts, val, useUtc }) => `<b>${series}</b><br>${(useUtc ? d3UtcFormat : d3TimeFormat)(timeFormat)(ts)}: <b>${val}</b>` },
     transitionDuration: { default: 250 },
     onHover: { triggerUpdate: false },
     onClick: {}
@@ -54,7 +55,6 @@ export default Kapsule({
 
   stateInit() {
     return {
-      timeScale: d3ScaleTime(),
       horizonLayouts: {}, // per series
       zoomedInteraction: false
     }
@@ -101,7 +101,7 @@ export default Kapsule({
     const tsMemo = memo(accessorFn(state.ts));
 
     const times = state.data.map(tsMemo);
-    state.timeScale
+    const timeScale = (state.useUtc ? d3ScaleUtc : d3ScaleTime)()
       .domain(d3Extent(times))
       .range([0, state.width]);
 
@@ -110,9 +110,9 @@ export default Kapsule({
 
       // apply zoom
       const zoomTransform = d3ZoomTransform(state.zoom.__baseElem.node());
-      const zoomedTimeLength = (state.timeScale.domain()[1] - state.timeScale.domain()[0]) / zoomTransform.k;
-      const zoomedStartTime = state.timeScale.invert(-zoomTransform.x / zoomTransform.k);
-      state.timeScale.domain([zoomedStartTime, new Date(+zoomedStartTime + zoomedTimeLength)]);
+      const zoomedTimeLength = (timeScale.domain()[1] - timeScale.domain()[0]) / zoomTransform.k;
+      const zoomedStartTime = timeScale.invert(-zoomTransform.x / zoomTransform.k);
+      timeScale.domain([zoomedStartTime, new Date(+zoomedStartTime + zoomedTimeLength)]);
     }
 
     const bySeries = indexBy(state.data, state.series);
@@ -188,17 +188,17 @@ export default Kapsule({
         .yExtent(yExtentAccessor(series) || normalizedYMax || null) // Use normalizedYMax (if calculated) if yExtent is not explicitly set
         .yScaleExp(yScaleExpAccessor(series))
         .yAggregation(state.yAggregation)
-        .xMin(state.timeScale.domain()[0])
-        .xMax(state.timeScale.domain()[1])
+        .xMin(timeScale.domain()[0])
+        .xMax(timeScale.domain()[1])
         .positiveColors(positiveColorsAccessor(series))
         .negativeColors(negativeColorsAccessor(series))
         .positiveColorStops(positiveColorStopsAccessor(series))
         .negativeColorStops(negativeColorStopsAccessor(series))
         .interpolationCurve(state.interpolationCurve)
         .duration(state.transitionDuration)
-        .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest })))
+        .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest, useUtc: state.useUtc })))
         .onHover(d => {
-          d && state.ruler.style('left', `${state.timeScale(d.x)}px`);
+          d && state.ruler.style('left', `${timeScale(d.x)}px`);
           state.ruler.style('opacity', d ? 0.2 : 0);
 
           d && state.onHover && state.onHover({ series, ts: d.x, val: d.y, points: d.points });
@@ -214,7 +214,7 @@ export default Kapsule({
     state.axisEl
       .transition(tr)
         .attr('width', state.width)
-        .call(d3AxisBottom(state.timeScale));
+        .call(d3AxisBottom(timeScale));
 
     state.zoomedInteraction = false;
   }
