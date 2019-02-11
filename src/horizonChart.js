@@ -79,7 +79,6 @@ export default Kapsule({
     state.chartsEl.call(state.zoom = d3Zoom());
     state.zoom.__baseElem = state.chartsEl; // Attach controlling elem for easy access
     state.zoom
-      .scaleExtent([1, MAX_ZOOM_SCALE])
       .on('zoom', () => {
         if (state.enableZoom) {
           state.zoomedInteraction = true;
@@ -104,6 +103,9 @@ export default Kapsule({
     state.timeScale
       .domain(d3Extent(times))
       .range([0, state.width]);
+
+    // set scale extent to 1 if zoom is disabled, to allow default wheel events to bubble
+    state.zoom.scaleExtent([1, state.enableZoom ? MAX_ZOOM_SCALE : 1]);
 
     if (state.enableZoom) {
       state.zoom.translateExtent([[0, 0], [state.width, 0]]);
