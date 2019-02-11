@@ -171,7 +171,7 @@ export default Kapsule({
       .attr('class', 'label')
       .style('font-size', 0);
 
-    const allHorizons = horizons.merge(newHorizons);
+    const allHorizons = horizons.merge(newHorizons).order();
 
     allHorizons
       .transition(tr)
