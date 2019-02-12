@@ -5,7 +5,7 @@ import { axisBottom as d3AxisBottom } from 'd3-axis';
 import { scaleTime as d3ScaleTime, scaleUtc as d3ScaleUtc } from 'd3-scale';
 import { timeFormat as d3TimeFormat, utcFormat as d3UtcFormat } from 'd3-time-format';
 import { curveBasis as d3CurveBasis } from 'd3-shape';
-import { extent as d3Extent } from 'd3-array';
+import { extent as d3Extent, max as d3Max } from 'd3-array';
 import d3Horizon from 'd3-horizon';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
@@ -126,8 +126,8 @@ export default Kapsule({
       }));
 
     // Calculate global Y max if yNormalize is on
-    const normalizedYMax = !state.yNormalize ? null : Math.max(
-      ...indexBy(
+    const normalizedYMax = !state.yNormalize ? null : d3Max(
+      indexBy(
         state.data,
         [state.series, d => +tsMemo(d)],
         points => state.yAggregation(points.map(valAccessor)),
