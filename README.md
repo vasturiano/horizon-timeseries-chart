@@ -67,3 +67,8 @@ myChart
 | <b>tooltipContent</b>([<i>fn({series, ts, val, points})</i>]) | Getter/setter for the tooltip content accessor function. Accepts plain-text or HTML. A value of `null` will permanently hide the tooltip. | ```({ series, ts, val }) => `${series}<br>${ts}: ${val}` ``` |
 | <b>onHover</b>([<i>fn({x, y, points})</i>]) | Callback function for chart hover events. Gets triggered every time the mouse moves in/out of a different point hover area. Includes the point information as single argument, with `x`, `y` and `points` (list of all data points associated with the corresponding `x` value) data. If no point is in the `x` proximity of the mouse pointer, a value of `null` is returned instead. | - |
 | <b>onClick</b>([<i>fn({x, y, points})</i>]) | Callback function for chart click events. Includes the currently hovered point information as single argument, with `x`, `y` and `points` (list of all data points associated with the corresponding `x` value) data. If no point is in the `x` proximity of the mouse pointer, a value of `null` is returned instead. | - |
+
+## Giving Back
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url) If this project has helped you and you'd like to contribute back, you can always [buy me a ☕](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url)!
+
