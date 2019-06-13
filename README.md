@@ -1,4 +1,9 @@
-# Horizon Time-series Chart
+Horizon Time-series Chart
+==============
+
+[![NPM package][npm-img]][npm-url]
+[![Build Size][build-size-img]][build-size-url]
+[![Dependencies][dependencies-img]][dependencies-url]
 
 <p align="center">
      <a href="https://vasturiano.github.io/horizon-timeseries-chart/example/basic/"><img width="80%" src="https://vasturiano.github.io/horizon-timeseries-chart/example/basic/screenshot.png"></a>
@@ -72,3 +77,10 @@ myChart
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url) If this project has helped you and you'd like to contribute back, you can always [buy me a ☕](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url)!
 
+
+[npm-img]: https://img.shields.io/npm/v/horizon-timeseries-chart.svg
+[npm-url]: https://npmjs.org/package/horizon-timeseries-chart
+[build-size-img]: https://img.shields.io/bundlephobia/minzip/horizon-timeseries-chart.svg
+[build-size-url]: https://bundlephobia.com/result?p=horizon-timeseries-chart
+[dependencies-img]: https://img.shields.io/david/vasturiano/horizon-timeseries-chart.svg
+[dependencies-url]: https://david-dm.org/vasturiano/horizon-timeseries-chart
