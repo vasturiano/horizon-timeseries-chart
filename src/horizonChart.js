@@ -1,4 +1,4 @@
-import { select as d3Select, event as d3Event } from 'd3-selection';
+import { select as d3Select } from 'd3-selection';
 import { transition as d3Transition } from 'd3-transition';
 import { zoom as d3Zoom, zoomTransform as d3ZoomTransform } from 'd3-zoom';
 import { axisBottom as d3AxisBottom } from 'd3-axis';
