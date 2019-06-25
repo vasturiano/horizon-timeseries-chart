@@ -30,7 +30,7 @@ export default Kapsule({
     horizonBands: { default: 4 },
     horizonMode: { default: 'offset' }, // or mirror
     useUtc: { default: false }, // local timezone vs utc
-    use24hFormat: { default: true }, // 24h vs am/pm format
+    use24h: { default: true }, // 24h vs am/pm format
     yExtent: {}, // undefined means it will be derived dynamically from the data
     yNormalize: { default: false },
     yScaleExp: { default: 1 },
@@ -47,9 +47,9 @@ export default Kapsule({
       onChange: (show, state) => state.ruler && state.ruler.style('visibility', show ? 'visible' : 'hidden')
     },
     enableZoom: { default: false },
-    tooltipContent: { default: ({ series, ts, val, useUtc, use24hFormat }) =>
+    tooltipContent: { default: ({ series, ts, val, useUtc, use24h }) =>
       `<b>${series}</b><br>
-      ${new Date(ts).toLocaleString(undefined, { timeZone: useUtc ? 'UTC' : undefined, hour12: !use24hFormat })}:
+      ${new Date(ts).toLocaleString(undefined, { timeZone: useUtc ? 'UTC' : undefined, hour12: !use24h })}:
       <b>${val}</b>`
     },
     transitionDuration: { default: 250 },
@@ -112,7 +112,7 @@ export default Kapsule({
     // const timeAxis = d3AxisBottom(timeScale)
     state.timeAxis
       .scale(timeScale)
-      .tickFormat(axisTimeFormatter({ useUtc: state.useUtc, use24hFormat: state.use24hFormat }));
+      .tickFormat(axisTimeFormatter({ useUtc: state.useUtc, use24h: state.use24h }));
 
     // set scale extent to 1 if zoom is disabled, to allow default wheel events to bubble
     state.zoom.scaleExtent([1, state.enableZoom ? MAX_ZOOM_SCALE : 1]);
@@ -208,7 +208,7 @@ export default Kapsule({
         .negativeColorStops(negativeColorStopsAccessor(series))
         .interpolationCurve(state.interpolationCurve)
         .duration(state.transitionDuration)
-        .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest, useUtc: state.useUtc, use24hFormat: state.use24hFormat })))
+        .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest, useUtc: state.useUtc, use24h: state.use24h })))
         .onHover(d => {
           d && state.ruler.style('left', `${timeScale(d.x)}px`);
           state.ruler.style('opacity', d ? 0.2 : 0);
