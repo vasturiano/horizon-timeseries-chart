@@ -12,12 +12,12 @@ import accessorFn from 'accessor-fn';
 import indexBy from 'index-array-by';
 import memo from 'lodash.memoize';
 
+import getTimeFormatter from './timeFormatter';
+
 const AXIS_HEIGHT = 20;
 const MAX_FONT_SIZE = 13;
 const MIN_SERIES_HEIGHT_WITH_BORDER = 20;
 const MAX_ZOOM_SCALE = 5000;
-
-const timeFormat = '%Y-%m-%d %-I:%M:%S %p'; // d3-time-format syntax
 
 export default Kapsule({
   props: {
@@ -31,6 +31,7 @@ export default Kapsule({
     horizonBands: { default: 4 },
     horizonMode: { default: 'offset' }, // or mirror
     useUtc: { default: false }, // local timezone vs utc
+    use24hFormat: { default: true }, // 24h vs am/pm format
     yExtent: {}, // undefined means it will be derived dynamically from the data
     yNormalize: { default: false },
     yScaleExp: { default: 1 },
@@ -47,7 +48,12 @@ export default Kapsule({
       onChange: (show, state) => state.ruler && state.ruler.style('visibility', show ? 'visible' : 'hidden')
     },
     enableZoom: { default: false },
-    tooltipContent: { default: ({ series, ts, val, useUtc }) => `<b>${series}</b><br>${(useUtc ? d3UtcFormat : d3TimeFormat)(timeFormat)(ts)}: <b>${val}</b>` },
+    tooltipContent: { default: ({ series, ts, val, useUtc, use24hFormat }) => {
+      const timeFormatterFactory = useUtc ? d3UtcFormat : d3TimeFormat;
+      const timeFormat = `%Y-%m-%d ${use24hFormat ? '%H:%M:%S' : '%-I:%M:%S %p'}`; // d3-time-format syntax
+
+      return `<b>${series}</b><br>${timeFormatterFactory(timeFormat)(ts)}: <b>${val}</b>`
+    }},
     transitionDuration: { default: 250 },
     onHover: { triggerUpdate: false },
     onClick: {}
@@ -56,7 +62,8 @@ export default Kapsule({
   stateInit() {
     return {
       horizonLayouts: {}, // per series
-      zoomedInteraction: false
+      zoomedInteraction: false,
+      timeAxis: d3AxisBottom()
     }
   },
 
@@ -103,6 +110,11 @@ export default Kapsule({
     const timeScale = (state.useUtc ? d3ScaleUtc : d3ScaleTime)()
       .domain(d3Extent(times))
       .range([0, state.width]);
+
+    // const timeAxis = d3AxisBottom(timeScale)
+    state.timeAxis
+      .scale(timeScale)
+      .tickFormat(getTimeFormatter({ useUtc: state.useUtc, use24hFormat: state.use24hFormat }));
 
     // set scale extent to 1 if zoom is disabled, to allow default wheel events to bubble
     state.zoom.scaleExtent([1, state.enableZoom ? MAX_ZOOM_SCALE : 1]);
@@ -198,7 +210,7 @@ export default Kapsule({
         .negativeColorStops(negativeColorStopsAccessor(series))
         .interpolationCurve(state.interpolationCurve)
         .duration(state.transitionDuration)
-        .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest, useUtc: state.useUtc })))
+        .tooltipContent(state.tooltipContent && (({ x, y, ...rest }) => state.tooltipContent({ series, ts: x, val: y, ...rest, useUtc: state.useUtc, use24hFormat: state.use24hFormat })))
         .onHover(d => {
           d && state.ruler.style('left', `${timeScale(d.x)}px`);
           state.ruler.style('opacity', d ? 0.2 : 0);
@@ -214,9 +226,9 @@ export default Kapsule({
         .text(d => state.seriesLabelFormatter(d.series));
 
     state.axisEl
+      .call(state.timeAxis)
       .transition(tr)
-        .attr('width', state.width)
-        .call(d3AxisBottom(timeScale));
+        .attr('width', state.width);
 
     state.zoomedInteraction = false;
   }
