@@ -3,7 +3,6 @@ import { transition as d3Transition } from 'd3-transition';
 import { zoom as d3Zoom, zoomTransform as d3ZoomTransform } from 'd3-zoom';
 import { axisBottom as d3AxisBottom } from 'd3-axis';
 import { scaleTime as d3ScaleTime, scaleUtc as d3ScaleUtc } from 'd3-scale';
-import { timeFormat as d3TimeFormat, utcFormat as d3UtcFormat } from 'd3-time-format';
 import { curveBasis as d3CurveBasis } from 'd3-shape';
 import { extent as d3Extent, max as d3Max } from 'd3-array';
 import d3Horizon from 'd3-horizon';
@@ -12,7 +11,7 @@ import accessorFn from 'accessor-fn';
 import indexBy from 'index-array-by';
 import memo from 'lodash.memoize';
 
-import getTimeFormatter from './timeFormatter';
+import axisTimeFormatter from './axisTimeFormatter';
 
 const AXIS_HEIGHT = 20;
 const MAX_FONT_SIZE = 13;
@@ -48,12 +47,11 @@ export default Kapsule({
       onChange: (show, state) => state.ruler && state.ruler.style('visibility', show ? 'visible' : 'hidden')
     },
     enableZoom: { default: false },
-    tooltipContent: { default: ({ series, ts, val, useUtc, use24hFormat }) => {
-      const timeFormatterFactory = useUtc ? d3UtcFormat : d3TimeFormat;
-      const timeFormat = `%Y-%m-%d ${use24hFormat ? '%H:%M:%S' : '%-I:%M:%S %p'}`; // d3-time-format syntax
-
-      return `<b>${series}</b><br>${timeFormatterFactory(timeFormat)(ts)}: <b>${val}</b>`
-    }},
+    tooltipContent: { default: ({ series, ts, val, useUtc, use24hFormat }) =>
+      `<b>${series}</b><br>
+      ${new Date(ts).toLocaleString(undefined, { timeZone: useUtc ? 'UTC' : undefined, hour12: !use24hFormat })}:
+      <b>${val}</b>`
+    },
     transitionDuration: { default: 250 },
     onHover: { triggerUpdate: false },
     onClick: {}
@@ -114,7 +112,7 @@ export default Kapsule({
     // const timeAxis = d3AxisBottom(timeScale)
     state.timeAxis
       .scale(timeScale)
-      .tickFormat(getTimeFormatter({ useUtc: state.useUtc, use24hFormat: state.use24hFormat }));
+      .tickFormat(axisTimeFormatter({ useUtc: state.useUtc, use24hFormat: state.use24hFormat }));
 
     // set scale extent to 1 if zoom is disabled, to allow default wheel events to bubble
     state.zoom.scaleExtent([1, state.enableZoom ? MAX_ZOOM_SCALE : 1]);
