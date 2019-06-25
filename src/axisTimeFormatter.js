@@ -38,16 +38,16 @@ const utc = {
 const formats = {
   millisecond: () => '.%L',
   second: () => ':%S',
-  minute: ({ use24hFormat }) => `%${use24hFormat ? 'H' : 'I'}:%M`,
-  hour: ({ use24hFormat }) => (use24hFormat ? '%H:%M' : '%I %p'),
+  minute: ({ use24h }) => `%${use24h ? 'H' : 'I'}:%M`,
+  hour: ({ use24h }) => (use24h ? '%H:%M' : '%I %p'),
   day: () => '%a %d',
   week: () => '%b %d',
   month: () => '%b',
   year: () => '%Y'
 };
 
-export default function({ useUtc = false, use24hFormat = false }) {
-  const formatOpts = { use24hFormat };
+export default function({ useUtc = false, use24h = false }) {
+  const formatOpts = { use24h };
   const formatFn = useUtc ? utcFormat : timeFormat;
   const f = Object.assign(
     {},
