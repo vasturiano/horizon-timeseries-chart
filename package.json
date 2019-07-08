@@ -3,6 +3,7 @@
   "version": "1.6.0",
   "description": "A chart to represent time-series data using multiple vertically layered horizon area plots",
   "unpkg": "dist/horizon-timeseries-chart.min.js",
+  "jsdelivr": "dist/horizon-timeseries-chart.min.js",
   "main": "dist/horizon-timeseries-chart.common.js",
   "module": "dist/horizon-timeseries-chart.module.js",
   "repository": {
