@@ -3,6 +3,10 @@
   border: 0 solid darkgray;
 }
 
+.horizon-series:hover {
+  border: 1px solid indianred;
+}
+
 .horizon-series .label {
   position: absolute;
   bottom: 0;
