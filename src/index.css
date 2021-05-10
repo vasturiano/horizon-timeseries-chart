@@ -4,7 +4,8 @@
 }
 
 .horizon-series:hover {
-  border: 1px solid indianred;
+  border-top: 1px solid indianred;
+  border-bottom: 1px solid indianred;
 }
 
 .horizon-series .label {
