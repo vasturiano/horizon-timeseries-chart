@@ -1409,15 +1409,15 @@ d3-drag@2:
   integrity sha512-hdL7+HBIohpgfolhBxr1KX47VMD6+vVD/oEFrxk5yhmzV2prk99EkFKYpXuhVkFpTgHdJ6/4bYcjdLPPXV4tIA==
 
 d3-horizon@1:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/d3-horizon/-/d3-horizon-1.11.0.tgz#66e46ec151092c37d65758aad42ac19d646feddd"
-  integrity sha512-ND5TBTPX237r0EfUZqVef5ytvxKqnr559q5W9bK6mcOeBLd8R4aE8K2tcqX62nvxsDy9x/TnqD7ml9WuopcCmA==
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/d3-horizon/-/d3-horizon-1.11.1.tgz#ddbdd0ea578656184ac3e8a17e83b326919f04e2"
+  integrity sha512-JZsapESGb9Smm2wiZT7aHnx5D4p4Zj3vTLzEOT97KjB7yHoERLDnN1DbzPxghkwXdm9PyhJjoZzL4c1suG8D6A==
   dependencies:
     accessor-fn "1"
-    d3-array "2 - 3"
-    d3-scale "2 - 4"
+    d3-array "1 - 3"
+    d3-scale "1 - 4"
     d3-selection "2 - 3"
-    d3-shape "2 - 3"
+    d3-shape "1 - 3"
     d3-transition "2 - 3"
     index-array-by "1"
     kapsule "1"
@@ -1441,7 +1441,7 @@ d3-horizon@1:
   resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-3.0.1.tgz#f09dec0aaffd770b7995f1a399152bf93052321e"
   integrity sha512-gq6gZom9AFZby0YLduxT1qmrp4xpBA1YZr19OI717WIdKE2OM5ETq5qrHLb301IgxhLwcuxvGZVLeeWc/k1I6w==
 
-"d3-scale@2 - 4", "d3-scale@3 - 4":
+"d3-scale@1 - 4":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-4.0.0.tgz#294377ea1d7e5a31509ee648b98d7916ac0b34e3"
   integrity sha512-foHQYKpWQcyndH1CGoHdUC4PECxTxonzwwBXGT8qu+Drb1FIc6ON6dG2P5f4hRRMkLiIKeWK7iFtdznDUrnuPQ==
@@ -1462,14 +1462,14 @@ d3-selection@2:
   resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-3.0.0.tgz#c25338207efa72cc5b9bd1458a1a41901f1e1b31"
   integrity sha512-fmTRWbNMmsmWq6xJV8D19U/gw/bwrHfNXxrIN+HfZgnzqTHp9jOmKMhsTUjXOJnZOdZY9Q28y4yebKzqDKlxlQ==
 
-"d3-shape@1 - 3", "d3-shape@2 - 3":
+"d3-shape@1 - 3":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-3.0.1.tgz#9ccdfb28fd9b0d12f2d8aec234cd5c4a9ea27931"
   integrity sha512-HNZNEQoDhuCrDWEc/BMbF/hKtzMZVoe64TvisFLDp2Iyj0UShB/E6/lBsLlJTfBMbYgftHj90cXJ0SEitlE6Xw==
   dependencies:
     d3-path "1 - 3"
 
-"d3-time-format@2 - 4":
+"d3-time-format@1 - 4", "d3-time-format@2 - 4":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-4.0.0.tgz#930ded86a9de761702344760d8a25753467f28b7"
   integrity sha512-nzaCwlj+ZVBIlFuVOT1RmU+6xb/7D5IcnhHzHQcBgS/aTa5K9fWZNN5LCXA27LgF5WxoSNJqKBbLcGMtM6Ca6A==
