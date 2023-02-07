@@ -2,11 +2,16 @@
   "name": "horizon-timeseries-chart",
   "version": "1.9.2",
   "description": "A chart to represent time-series data using multiple vertically layered horizon area plots",
+  "type": "module",
   "unpkg": "dist/horizon-timeseries-chart.min.js",
   "jsdelivr": "dist/horizon-timeseries-chart.min.js",
-  "main": "dist/horizon-timeseries-chart.common.js",
-  "module": "dist/horizon-timeseries-chart.module.js",
+  "main": "dist/horizon-timeseries-chart.mjs",
+  "module": "dist/horizon-timeseries-chart.mjs",
   "types": "dist/horizon-timeseries-chart.d.ts",
+  "exports": {
+    "umd": "./dist/horizon-timeseries-chart.min.js",
+    "default": "./dist/horizon-timeseries-chart.mjs"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vasturiano/horizon-timeseries-chart.git"
@@ -53,19 +58,20 @@
     "lodash.memoize": "4"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.14.4",
-    "@babel/preset-env": "^7.14.4",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.0",
-    "postcss": "^8.3.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.51.1",
-    "rollup-plugin-dts": "^3.0.2",
-    "rollup-plugin-postcss": "^4.0.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.3.2"
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "postcss": "^8.4.21",
+    "rimraf": "^4.1.2",
+    "rollup": "^3.14.0",
+    "rollup-plugin-dts": "^5.1.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": ">=12"
   }
 }

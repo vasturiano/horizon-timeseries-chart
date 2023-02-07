@@ -26,11 +26,7 @@ Check out the examples:
 ```js
 import HorizonTSChart from 'horizon-timeseries-chart';
 ```
-or
-```js
-const HorizonTSChart = require('horizon-timeseries-chart');
-```
-or even
+or using a *script* tag
 ```html
 <script src="//unpkg.com/horizon-timeseries-chart"></script>
 ```
