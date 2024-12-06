@@ -32,10 +32,8 @@ or using a *script* tag
 ```
 then
 ```js
-const myChart = HorizonTSChart();
-myChart
-    .data(<myData>)
-    (<myDOMElement>);
+const myChart = new HorizonTSChart(<myDOMElement>)
+  .data(<myData>);
 ```
 
 ## API reference

@@ -18,74 +18,70 @@ type InteractionFn = (interactionData: { x: number, y:number, points: PointD[] }
 
 type InterpolationCurveFn = (canvasCtx?: object) => object;
 
-export interface HorizonTSChartGenericInstance<ChainableInstance> {
-  (element: HTMLElement): ChainableInstance;
+declare class HorizonTSChart {
+  constructor(element: HTMLElement, configOptions?: ConfigOptions);
 
   width(): number;
-  width(width: number): ChainableInstance;
+  width(width: number): HorizonTSChart;
   height(): number;
-  height(height: number): ChainableInstance;
+  height(height: number): HorizonTSChart;
 
   data(): Datum[];
-  data(data: Datum[]): ChainableInstance;
+  data(data: Datum[]): HorizonTSChart;
 
   series(): DataAccessor<Series>;
-  series(seriesAccessor: DataAccessor<Series>): ChainableInstance;
+  series(seriesAccessor: DataAccessor<Series>): HorizonTSChart;
   seriesComparator(): CompareFn<Series>;
-  seriesComparator(cmpFn: CompareFn<Series>): ChainableInstance;
+  seriesComparator(cmpFn: CompareFn<Series>): HorizonTSChart;
   seriesLabelFormatter(): Formatter<Series>;
-  seriesLabelFormatter(formatter: Formatter<Series>): ChainableInstance;
+  seriesLabelFormatter(formatter: Formatter<Series>): HorizonTSChart;
 
   ts(): DataAccessor<number | Date>;
-  ts(tsAccessor: DataAccessor<number | Date>): ChainableInstance;
+  ts(tsAccessor: DataAccessor<number | Date>): HorizonTSChart;
   val(): DataAccessor<number>;
-  val(tsAccessor: DataAccessor<number>): ChainableInstance;
+  val(tsAccessor: DataAccessor<number>): HorizonTSChart;
   useUtc(): boolean;
-  useUtc(utc: boolean): ChainableInstance;
+  useUtc(utc: boolean): HorizonTSChart;
   use24h(): boolean;
-  use24h(use24h: boolean): ChainableInstance;
+  use24h(use24h: boolean): HorizonTSChart;
 
   horizonBands(): number;
-  horizonBands(bands?: number): ChainableInstance;
+  horizonBands(bands?: number): HorizonTSChart;
   horizonMode(): HorizonMode;
-  horizonMode(mode: HorizonMode): ChainableInstance;
+  horizonMode(mode: HorizonMode): HorizonTSChart;
   yNormalize(): boolean;
-  yNormalize(normalize: boolean): ChainableInstance;
+  yNormalize(normalize: boolean): HorizonTSChart;
 
   yExtent(): SeriesAccessor<number | undefined>;
-  yExtent(extentAccessor: SeriesAccessor<number | undefined>): ChainableInstance;
+  yExtent(extentAccessor: SeriesAccessor<number | undefined>): HorizonTSChart;
   yScaleExp(): SeriesAccessor<number>;
-  yScaleExp(exponentAccessor: SeriesAccessor<number>): ChainableInstance;
+  yScaleExp(exponentAccessor: SeriesAccessor<number>): HorizonTSChart;
   yAggregation(): AggregationFn<number>;
-  yAggregation(aggFn: AggregationFn<number>): ChainableInstance;
+  yAggregation(aggFn: AggregationFn<number>): HorizonTSChart;
 
   positiveColors(): SeriesAccessor<string[]>;
-  positiveColors(colorsAccessor: SeriesAccessor<string[]>): ChainableInstance;
+  positiveColors(colorsAccessor: SeriesAccessor<string[]>): HorizonTSChart;
   positiveColorStops(): SeriesAccessor<number[]>;
-  positiveColorStops(colorStopsAccessor: SeriesAccessor<number[]>): ChainableInstance;
+  positiveColorStops(colorStopsAccessor: SeriesAccessor<number[]>): HorizonTSChart;
   negativeColors(): SeriesAccessor<string[]>;
-  negativeColors(colorsAccessor: SeriesAccessor<string[]>): ChainableInstance;
+  negativeColors(colorsAccessor: SeriesAccessor<string[]>): HorizonTSChart;
   negativeColorStops(): SeriesAccessor<number[]>;
-  negativeColorStops(colorStopsAccessor: SeriesAccessor<number[]>): ChainableInstance;
+  negativeColorStops(colorStopsAccessor: SeriesAccessor<number[]>): HorizonTSChart;
 
   interpolationCurve(): InterpolationCurveFn;
-  interpolationCurve(fn: InterpolationCurveFn | false): ChainableInstance;
+  interpolationCurve(fn: InterpolationCurveFn | false): HorizonTSChart;
 
   showRuler(): boolean;
-  showRuler(show: boolean): ChainableInstance;
+  showRuler(show: boolean): HorizonTSChart;
   enableZoom(): boolean;
-  enableZoom(enable: boolean): ChainableInstance;
+  enableZoom(enable: boolean): HorizonTSChart;
   transitionDuration(): number;
-  transitionDuration(ms: number): ChainableInstance;
+  transitionDuration(ms: number): HorizonTSChart;
 
   tooltipContent(): TooltipAccessorFn;
-  tooltipContent(contentAccessor: TooltipAccessorFn): ChainableInstance;
-  onClick(cb: InteractionFn): ChainableInstance;
-  onHover(cb: InteractionFn): ChainableInstance;
+  tooltipContent(contentAccessor: TooltipAccessorFn): HorizonTSChart;
+  onClick(cb: InteractionFn): HorizonTSChart;
+  onHover(cb: InteractionFn): HorizonTSChart;
 }
-
-export type HorizonTSChartInstance = HorizonTSChartGenericInstance<HorizonTSChartInstance>;
-
-declare function HorizonTSChart(configOptions?: ConfigOptions): HorizonTSChartInstance;
 
 export default HorizonTSChart;

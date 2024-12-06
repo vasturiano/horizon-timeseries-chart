@@ -23,7 +23,7 @@
     const data = genRandomTSData(365 * 25); // 25y in days
     const yMax = Math.max(...data.map(d => Math.abs(d.val)));
 
-    const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
+    const chart = new HorizonTSChart(document.getElementById('horizon-chart'))
       .data(data)
       .seriesLabelFormatter(() => '')
       .yExtent(yMax)

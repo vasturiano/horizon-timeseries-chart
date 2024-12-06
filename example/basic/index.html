@@ -11,7 +11,7 @@
 
   <script>
 
-    HorizonTSChart()(document.getElementById('horizon-chart'))
+    new HorizonTSChart(document.getElementById('horizon-chart'))
       .data(genTSData(10))
       .series('series')
       .yNormalize(true);

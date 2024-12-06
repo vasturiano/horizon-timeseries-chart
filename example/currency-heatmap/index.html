@@ -54,7 +54,7 @@
 
         const formatPrice = val => `<i>$${Math.round(val * 1e4) / 1e4}</i>`;
 
-        HorizonTSChart()(document.getElementById('horizon-chart'))
+        new HorizonTSChart(document.getElementById('horizon-chart'))
           .data(chartData)
           .series('currencyId')
           .ts('date')

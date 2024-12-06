@@ -14,7 +14,7 @@
     const N_SERIES = 3;
     const TIME_STEP = 1000;
 
-    const chart = HorizonTSChart()(document.getElementById('horizon-chart'))
+    const chart = new HorizonTSChart(document.getElementById('horizon-chart'))
       .series('series')
       .yNormalize(true)
       .interpolationCurve(false);
