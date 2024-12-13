@@ -3,18 +3,19 @@
     body { margin: 0; }
   </style>
 
-  <script src="//unpkg.com/d3-dsv"></script>
   <script src="//unpkg.com/horizon-timeseries-chart"></script>
   <!--<script src="../../dist/horizon-timeseries-chart.js"></script>-->
 </head>
 <body>
   <div id="horizon-chart"></div>
 
-  <script>
+  <script type="module">
+    import { csvParse } from 'https://esm.sh/d3-dsv';
+
     // data sourced from https://www.bis.org/statistics/xrusd.htm
     fetch('./bis-dollar-currencies-daily.csv')
       .then(r => r.text())
-      .then(d3.csvParse)
+      .then(csvParse)
       .then(data => {
         const chartData = [];
 

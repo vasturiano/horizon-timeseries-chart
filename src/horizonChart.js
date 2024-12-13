@@ -5,7 +5,7 @@ import { axisBottom as d3AxisBottom } from 'd3-axis';
 import { scaleTime as d3ScaleTime, scaleUtc as d3ScaleUtc } from 'd3-scale';
 import { curveBasis as d3CurveBasis } from 'd3-shape';
 import { extent as d3Extent, max as d3Max } from 'd3-array';
-import d3Horizon from 'd3-horizon';
+import Horizon from 'd3-horizon';
 import Kapsule from 'kapsule';
 import accessorFn from 'accessor-fn';
 import indexBy from 'index-array-by';
@@ -171,11 +171,10 @@ export default Kapsule({
     newHorizons.append('div')
       .attr('class', 'chart')
       .each(function({ series }) {
-        // instantiate d3-horizon for each new series
-        state.horizonLayouts[series] = d3Horizon()
+        // instantiate horizon for each new series
+        state.horizonLayouts[series] = new Horizon(this)
           .width(state.width)
-          .height(seriesHeight - borderWidth)
-          (this);
+          .height(seriesHeight - borderWidth);
       });
     newHorizons.append('span')
       .attr('class', 'label')
