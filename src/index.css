@@ -17,7 +17,7 @@
   pointer-events: none;
 }
 
-.horizon-series .chart .horizon-tooltip {
+.horizon-series .chart .float-tooltip-kap {
   z-index: 1000;
 }
 
