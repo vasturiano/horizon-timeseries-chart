@@ -28,7 +28,7 @@ import HorizonTSChart from 'horizon-timeseries-chart';
 ```
 or using a *script* tag
 ```html
-<script src="//unpkg.com/horizon-timeseries-chart"></script>
+<script src="//cdn.jsdelivr.net/npm/horizon-timeseries-chart"></script>
 ```
 then
 ```js
