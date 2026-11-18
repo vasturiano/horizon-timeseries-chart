@@ -9,6 +9,7 @@
   "module": "dist/horizon-timeseries-chart.mjs",
   "types": "dist/horizon-timeseries-chart.d.ts",
   "exports": {
+    "types": "./dist/horizon-timeseries-chart.d.ts",
     "umd": "./dist/horizon-timeseries-chart.min.js",
     "default": "./dist/horizon-timeseries-chart.mjs"
   },
